@@ -55,8 +55,8 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.chirag_redij.netclan.Homescreen.Constants.peopleList
 import com.chirag_redij.netclan.Homescreen.UserTile.UserTileComposable
-import com.chirag_redij.netclan.Homescreen.UserTile.peopleList
 import com.chirag_redij.netclan.Homescreen.appbar.AppBar
 import com.chirag_redij.netclan.Homescreen.bottombar.DefaultBottomAppBar
 import com.chirag_redij.netclan.Homescreen.destinations.ChatScreenDestination
@@ -64,6 +64,7 @@ import com.chirag_redij.netclan.Homescreen.destinations.ContactScreenDestination
 import com.chirag_redij.netclan.Homescreen.destinations.GroupsScreenDestination
 import com.chirag_redij.netclan.Homescreen.destinations.HomeScreenDestination
 import com.chirag_redij.netclan.Homescreen.destinations.NetworkScreenDestination
+import com.chirag_redij.netclan.Homescreen.explore.Tabs
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
@@ -150,38 +151,10 @@ fun HomeScreen(
                     .background(Color.White)
             ) {
                 Column {
-                    ExploreHeadingBar()
-                    SearchSection()
-                    LazyColumn (
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                       items (count = peopleList.size) {
-                            UserTileComposable(userTile = peopleList[it])
-                       }
-                    }
+                    Tabs()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ExploreHeadingBar() {
-    Row (
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .background(MaterialTheme.colorScheme.secondary)
-            .fillMaxWidth()
-            .padding(vertical = 12.dp)
-    ) {
-        Text(text = "Personal", fontStyle = FontStyle.Normal ,fontSize = 16.sp ,color = Color.White)
-        Text(text = "Business", fontStyle = FontStyle.Normal ,fontSize = 16.sp ,color = Color.White)
-        Text(text = "Merchant", fontStyle = FontStyle.Normal ,fontSize = 16.sp ,color = Color.White)
     }
 }
 

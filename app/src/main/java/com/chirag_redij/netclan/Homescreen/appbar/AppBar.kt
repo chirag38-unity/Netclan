@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +26,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.chirag_redij.netclan.Homescreen.destinations.RefineScreenDestination
 import com.chirag_redij.netclan.Homescreen.refine.RefineScreen
+import com.chirag_redij.netclan.ui.theme.NoRippleTheme
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,25 +97,28 @@ fun AppBarContent(
                   imageVector = Icons.Filled.Place,
                   contentDescription = null,
                   modifier = Modifier.size(16.dp))
-              Text(text = "Panvel", fontSize = 16.sp)
+              Text(text = "Panvel", fontSize = 15.sp)
           }
        }
 
-       Column (
-           horizontalAlignment = Alignment.CenterHorizontally,
-           modifier = Modifier
-               .align(Alignment.CenterVertically)
-               .padding(end = 10.dp)
-               .clickable {
-                   navigator.navigate(RefineScreenDestination)
-               }
-       ) {
+       CompositionLocalProvider (LocalRippleTheme provides NoRippleTheme) {
+           Column(
+               horizontalAlignment = Alignment.CenterHorizontally,
+               modifier = Modifier
+                   .align(Alignment.CenterVertically)
+                   .padding(end = 10.dp)
+                   .clickable {
+                       navigator.navigate(RefineScreenDestination)
+                   }
+           ) {
 
-           Icon(
-               imageVector = Icons.Filled.Check,
-               contentDescription = null,
-               modifier = Modifier.size(16.dp))
-           Text(text = "Refine", fontSize = 16.sp)
+               Icon(
+                   imageVector = Icons.Filled.Check,
+                   contentDescription = null,
+                   modifier = Modifier.size(20.dp)
+               )
+               Text(text = "Refine", fontSize = 15.sp)
+           }
        }
 
    }

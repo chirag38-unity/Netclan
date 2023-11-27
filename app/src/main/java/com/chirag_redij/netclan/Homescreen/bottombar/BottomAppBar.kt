@@ -1,32 +1,31 @@
 package com.chirag_redij.netclan.Homescreen.bottombar
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Contacts
-import androidx.compose.material.icons.filled.Groups
-import androidx.compose.material.icons.filled.RemoveRedEye
-import androidx.compose.material.icons.filled.SignalCellular4Bar
-import androidx.compose.material.icons.outlined.Chat
-import androidx.compose.material.icons.outlined.Contacts
-import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.RemoveRedEye
-import androidx.compose.material.icons.outlined.SignalCellular0Bar
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalAbsoluteTonalElevation
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import com.chirag_redij.netclan.Homescreen.Constants.bottomNavItems
+import com.chirag_redij.netclan.ui.theme.NoRippleTheme
 import timber.log.Timber
 
 data class BottomAppBarNavigationItem (
@@ -43,75 +42,53 @@ fun DefaultBottomAppBar(
     seletctedItem : Int,
     onNavigationClick : (Int) -> Unit
 ) {
-    val bottomNavItems = listOf<BottomAppBarNavigationItem>(
-        BottomAppBarNavigationItem(
-            title = "Explore",
-            selectedIcon = Icons.Filled.RemoveRedEye,
-            unselectedIcon = Icons.Outlined.RemoveRedEye,
-            showBadge = false
-        ),
-        BottomAppBarNavigationItem(
-            title = "Network",
-            selectedIcon = Icons.Filled.SignalCellular4Bar,
-            unselectedIcon = Icons.Outlined.SignalCellular0Bar,
-            showBadge = false
-        ),
-        BottomAppBarNavigationItem(
-            title = "Chat",
-            selectedIcon = Icons.Filled.Chat,
-            unselectedIcon = Icons.Outlined.Chat,
-            showBadge = false,
-            badgeCount = 3
-        ),
-        BottomAppBarNavigationItem(
-            title = "Contacts",
-            selectedIcon = Icons.Filled.Contacts,
-            unselectedIcon = Icons.Outlined.Contacts,
-            showBadge = false
-        ),
-        BottomAppBarNavigationItem(
-            title = "Groups",
-            selectedIcon = Icons.Filled.Groups,
-            unselectedIcon = Icons.Outlined.Groups,
-            showBadge = true
-        )
-    )
+
     var selectedItemIndex by rememberSaveable {
         mutableStateOf(seletctedItem)
     }
-    NavigationBar {
-        bottomNavItems.forEachIndexed { index, item ->
-            NavigationBarItem(
-                selected = selectedItemIndex == index,
-                onClick = {
-                    onNavigationClick(index)
-                    Timber.tag("BottomBar").d("Index - ${index}")
-                },
-                label = {
-                    Text(text = item.title)
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = Color.LightGray
-                ),
-                icon = {
-                    BadgedBox(
-                        badge = {
-                            if(item.badgeCount != null) {
-                                Badge {
-                                    Text(text = item.badgeCount.toString())
-                                }
-                            } else if(item.showBadge) {
-                                Badge()
-                            }
-                        }
-                    ) {
-                        Icon(
-                            imageVector = if(index == selectedItemIndex) item.selectedIcon else item.unselectedIcon ,
-                            contentDescription = item.title
-                        )
-                    }
-                })
-        }
 
+    CompositionLocalProvider (LocalRippleTheme provides NoRippleTheme) {
+
+        NavigationBar(
+            modifier = Modifier
+                .height(70.dp)
+                .padding(horizontal = 18.dp),
+            containerColor = Color.White
+        ) {
+            bottomNavItems.forEachIndexed { index, item ->
+                NavigationBarItem(
+                    selected = selectedItemIndex == index,
+                    onClick = {
+                        onNavigationClick(index)
+                        Timber.tag("BottomBar").d("Index - ${index}")
+                    },
+                    alwaysShowLabel = true,
+                    label = {
+                        Text(text = item.title)
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = Color.White
+                    ),
+                    icon = {
+                        BadgedBox(
+                            badge = {
+                                if (item.badgeCount != null) {
+                                    Badge {
+                                        Text(text = item.badgeCount.toString())
+                                    }
+                                } else if (item.showBadge) {
+                                    Badge()
+                                }
+                            }
+                        ) {
+                            Icon(
+                                imageVector = if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
+                        }
+                    })
+            }
+
+        }
     }
 }

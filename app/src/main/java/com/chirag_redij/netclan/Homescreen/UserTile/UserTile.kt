@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,14 +23,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 
 data class UserTile (
     val name : String,
     val initial : String,
     val description : String,
     val location : String,
+    val imageUrl : String? = null
 )
 
 @Composable
@@ -95,9 +103,7 @@ fun UserTileComposable(
                                 .fillMaxHeight()
                                 .fillMaxWidth(.4f)
                                 .background(Color.DarkGray)
-                        ) {
-
-                        }
+                        ) {}
                     }
 
                 }
@@ -120,7 +126,8 @@ fun UserTileComposable(
                         modifier = Modifier.fillMaxWidth(.65f),
                         text = "Hi community! I am open to new connections\uD83D\uDE04",
                         color = Color.LightGray,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        lineHeight = 16.sp
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -132,44 +139,30 @@ fun UserTileComposable(
             modifier = Modifier
                 .padding(start = 10.dp, top = 30.dp)
                 .size(60.dp)
-//                .clip(RoundedCornerShape(40.dp))
-                .shadow(2.dp, CircleShape, true)
+                .shadow(2.dp, RoundedCornerShape(16.dp), true)
                 .background(Color.LightGray),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = userTile.initial,
-                fontSize = 30.sp,
-                color = MaterialTheme.colorScheme.secondary
-            )
+            if(userTile.imageUrl.isNullOrBlank()){
+                Text(
+                    text = userTile.initial,
+                    fontSize = 30.sp,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            } else {
+                SubcomposeAsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(userTile.imageUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize(),
+                    contentDescription = "${userTile.name}'s profile image" )
+            }
+            
         }
 
     }
 }
 
-val peopleList = listOf(
-    UserTile(
-        name = "Vaibhav Kamble",
-        initial = "VK",
-        description = "Navi Mumbai | Testing Engineer",
-        location = "Within 8.1 KM"
-    ),
-    UserTile(
-        name = "Adesh Shinde",
-        initial = "AS",
-        description = "Navi Mumbai | Electronics Engineer",
-        location = "Within 12.8 KM"
-    ),
-    UserTile(
-        name = "Praveen Kumar",
-        initial = "PK",
-        description = "Navi Mumbai | Mechanical Engineer",
-        location = "Within 6 KM"
-    ),
-    UserTile(
-        name = "Gaurav Sawant",
-        initial = "GS",
-        description = "Navi Mumbai | IT Engineer",
-        location = "Within 9.4 KM"
-    )
-)

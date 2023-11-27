@@ -3,6 +3,8 @@ package com.chirag_redij.netclan.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -19,13 +21,21 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = DarkBlue,
     secondary = Accentblue,
-    tertiary = Color.Gray
+    tertiary = AccentGray ,
+
+    background = Color(0xFFFFFBFE),
+    surface = Color(0xFFFFFBFE),
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = Color(0xFF1C1B1F),
+    onSurface = Color(0xFF1C1B1F),
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = DarkBlue,
     secondary = Accentblue,
-    tertiary = Color.Gray,
+    tertiary = AccentGray,
 
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -50,7 +60,8 @@ fun NetclanTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
+//        darkTheme -> DarkColorScheme
+        darkTheme -> LightColorScheme
         else -> LightColorScheme
     }
     val view = LocalView.current
@@ -67,4 +78,12 @@ fun NetclanTheme(
         typography = Typography,
         content = content
     )
+}
+
+ object NoRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = Color.Unspecified
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0.0f,0.0f,0.0f,0.0f)
 }

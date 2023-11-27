@@ -4,8 +4,9 @@ import androidx.compose.ui.graphics.Color
 
 // Main Colors----------------------------------------
 
-val DarkBlue = Color(0xFF19194d)
-val Accentblue = Color(0xFF1f1f7a)
+val DarkBlue = Color(0xFF0f2e43)
+val Accentblue = Color(0xFF143d59)
+val AccentGray = Color(0xFF456174)
 
 // Default Colors-------------------------------------
 
