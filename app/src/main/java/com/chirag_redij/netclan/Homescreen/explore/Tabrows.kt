@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.chirag_redij.netclan.Homescreen.Constants.peopleList
 import com.chirag_redij.netclan.Homescreen.Constants.tabItemsList
+import com.chirag_redij.netclan.Homescreen.ExploreScreenFAB
 import com.chirag_redij.netclan.Homescreen.SearchSection
 import com.chirag_redij.netclan.Homescreen.UserTile.UserTileComposable
 
@@ -48,49 +50,57 @@ fun Tabs(
             selectedItem = pagerState.currentPage
         }
     }
-    Column (
-        modifier = Modifier.fillMaxSize()
-    ) {
 
-        TabRow(
-            selectedTabIndex = selectedItem,
-            containerColor = MaterialTheme.colorScheme.secondary,
-            contentColor = MaterialTheme.colorScheme.onSecondary,
-        ) {
-            tabItemsList.forEachIndexed { index, tabItem ->
-                Tab(
-                    selected = selectedItem == index,
-                    onClick = { selectedItem = index },
-                    text = {
-                        Text(text = tabItem.title)
-                    },
-                    selectedContentColor = MaterialTheme.colorScheme.onSecondary,
-                    unselectedContentColor = Color(0xFFaeb0b4)
-                )
-            }
+    Scaffold (
+        floatingActionButton = {
+            ExploreScreenFAB()
         }
-        HorizontalPager(
-            state = pagerState,
+    ) { paddingValues ->
+
+        Column (
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        ) {index ->
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
 
-            Column {
+            TabRow(
+                selectedTabIndex = selectedItem,
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary,
+            ) {
+                tabItemsList.forEachIndexed { index, tabItem ->
+                    Tab(
+                        selected = selectedItem == index,
+                        onClick = { selectedItem = index },
+                        text = {
+                            Text(text = tabItem.title)
+                        },
+                        selectedContentColor = MaterialTheme.colorScheme.onSecondary,
+                        unselectedContentColor = Color(0xFFaeb0b4)
+                    )
+                }
+            }
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) { index ->
+                Column {
 
-                SearchSection()
-                LazyColumn (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    items (count = peopleList.size) {
-                        UserTileComposable(userTile = peopleList[it])
+                    SearchSection()
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        items(count = peopleList.size) {
+                            UserTileComposable(userTile = peopleList[it])
+                        }
                     }
                 }
-
             }
         }
     }

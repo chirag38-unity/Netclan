@@ -1,5 +1,6 @@
 package com.chirag_redij.netclan.Homescreen.refine
 
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,8 +58,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.spec.DestinationStyle
 
-@Destination
+@Destination (
+    style = SlideTransition::class
+)
 @Composable
 fun RefineScreen(
     navigator: DestinationsNavigator

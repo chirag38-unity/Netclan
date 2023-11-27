@@ -16,7 +16,7 @@ android {
         minSdk = 29
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -92,7 +92,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Compose - Destinations
-    implementation("io.github.raamcosta.compose-destinations:core:1.9.54")
+    implementation("io.github.raamcosta.compose-destinations:animations-core:1.9.54")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.54")
 
     // Serialiser

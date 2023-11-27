@@ -7,15 +7,13 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalAbsoluteTonalElevation
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,13 +37,11 @@ data class BottomAppBarNavigationItem (
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DefaultBottomAppBar(
-    seletctedItem : Int,
-    onNavigationClick : (Int) -> Unit
+    seletctedItem: MutableState<Int>,
+    onNavigationClick: (Int) -> Unit
 ) {
 
-    var selectedItemIndex by rememberSaveable {
-        mutableStateOf(seletctedItem)
-    }
+    var selectedItemIndex = seletctedItem
 
     CompositionLocalProvider (LocalRippleTheme provides NoRippleTheme) {
 
@@ -57,7 +53,7 @@ fun DefaultBottomAppBar(
         ) {
             bottomNavItems.forEachIndexed { index, item ->
                 NavigationBarItem(
-                    selected = selectedItemIndex == index,
+                    selected = selectedItemIndex.value == index,
                     onClick = {
                         onNavigationClick(index)
                         Timber.tag("BottomBar").d("Index - ${index}")
@@ -82,7 +78,7 @@ fun DefaultBottomAppBar(
                             }
                         ) {
                             Icon(
-                                imageVector = if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
+                                imageVector = if (index == selectedItemIndex.value) item.selectedIcon else item.unselectedIcon,
                                 contentDescription = item.title
                             )
                         }

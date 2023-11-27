@@ -1,5 +1,6 @@
 package com.chirag_redij.netclan.Homescreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -36,6 +38,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,29 +52,22 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.chirag_redij.netclan.Homescreen.Constants.peopleList
-import com.chirag_redij.netclan.Homescreen.UserTile.UserTileComposable
+import com.chirag_redij.netclan.Homescreen.Constants.bottomNavItems
 import com.chirag_redij.netclan.Homescreen.appbar.AppBar
 import com.chirag_redij.netclan.Homescreen.bottombar.DefaultBottomAppBar
-import com.chirag_redij.netclan.Homescreen.destinations.ChatScreenDestination
-import com.chirag_redij.netclan.Homescreen.destinations.ContactScreenDestination
-import com.chirag_redij.netclan.Homescreen.destinations.GroupsScreenDestination
-import com.chirag_redij.netclan.Homescreen.destinations.HomeScreenDestination
-import com.chirag_redij.netclan.Homescreen.destinations.NetworkScreenDestination
-import com.chirag_redij.netclan.Homescreen.explore.Tabs
+import com.chirag_redij.netclan.Homescreen.refine.SlideTransition
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
+@OptIn(ExperimentalFoundationApi::class)
 @Destination(
-    start = true
+    start = true,
+    style = SlideTransition::class
 )
 @Composable
 fun HomeScreen(
@@ -79,6 +75,22 @@ fun HomeScreen(
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    var selectedItem = remember {
+        mutableStateOf(0)
+    }
+    val pagerState = rememberPagerState {
+        bottomNavItems.size
+    }
+    LaunchedEffect( selectedItem.value ) {
+        pagerState.animateScrollToPage(selectedItem.value)
+    }
+    LaunchedEffect( pagerState.currentPage, pagerState.isScrollInProgress ) {
+        if(!pagerState.isScrollInProgress) {
+            selectedItem.value = pagerState.currentPage
+        }
+    }
+
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
@@ -97,61 +109,43 @@ fun HomeScreen(
                 }
             },
             bottomBar = {
-                DefaultBottomAppBar(seletctedItem = 0) { index ->
+                DefaultBottomAppBar(seletctedItem = selectedItem) { index ->
                     scope.launch {
-                        when(index) {
-                            0 -> {
-
-                            }
-                            1 -> {
-                                navigator.navigate(NetworkScreenDestination()) {
-                                    popUpTo(HomeScreenDestination.route) {inclusive = true}
-                                }
-                            }
-                            2 -> {
-                                navigator.navigate(ChatScreenDestination()) {
-                                    popUpTo(HomeScreenDestination.route) {inclusive = true}
-                                }
-                            }
-                            3 -> {
-                                navigator.navigate(ContactScreenDestination()) {
-                                    popUpTo(HomeScreenDestination.route) {inclusive = true}
-                                }
-                            }
-                            4 -> {
-                                navigator.navigate(GroupsScreenDestination()) {
-                                    popUpTo(HomeScreenDestination.route) {inclusive = true}
-                                }
-                            }
-                            else -> {
-                                Timber.tag("BottomBar").d("Index - ${index}")
-                            }
-                        }
+                        selectedItem.value = index
                     }
-                }
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { /*TODO*/ },
-                    shape = CircleShape,
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
-                    elevation = FloatingActionButtonDefaults.elevation(
-
-                    )
-                ) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
                 }
             }
         ) { padding ->
-            Box (
+            Column (
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding)
                     .background(Color.White)
             ) {
-                Column {
-                    Tabs()
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                ) {index ->
+                    when (index) {
+                        0 -> {
+                            ExploreScreen()
+                        }
+                        1 -> {
+                            NetworkScreen()
+                        }
+                        2 -> {
+                            ChatScreen()
+                        }
+                        3 -> {
+                            ContactsScreen()
+                        }
+                        4 -> {
+                            GroupsScreen()
+                        }
+                    }
+
                 }
             }
         }
@@ -234,3 +228,18 @@ fun SearchBar(
         )
     }
 }
+
+@Composable
+fun ExploreScreenFAB() {
+    FloatingActionButton(
+        onClick = { /*TODO*/ },
+        shape = CircleShape,
+        containerColor = MaterialTheme.colorScheme.secondary,
+        contentColor = MaterialTheme.colorScheme.onSecondary,
+        elevation = FloatingActionButtonDefaults.elevation(
+        )
+    ) {
+        Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
+    }
+}
+
