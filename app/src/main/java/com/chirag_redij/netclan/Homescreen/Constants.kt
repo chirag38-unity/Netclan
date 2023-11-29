@@ -1,10 +1,15 @@
 package com.chirag_redij.netclan.Homescreen
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArtTrack
 import androidx.compose.material.icons.filled.Business
 import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.Coffee
 import androidx.compose.material.icons.filled.Contacts
+import androidx.compose.material.icons.filled.Dining
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.MovieFilter
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.RemoveRedEye
 import androidx.compose.material.icons.filled.Sell
@@ -20,9 +25,52 @@ import androidx.compose.material.icons.outlined.SignalCellular0Bar
 import com.chirag_redij.netclan.Homescreen.UserTile.UserTile
 import com.chirag_redij.netclan.Homescreen.bottombar.BottomAppBarNavigationItem
 import com.chirag_redij.netclan.Homescreen.explore.TabItem
+import com.chirag_redij.netclan.Homescreen.refine.Purpose
 
 
 object Constants {
+    val PurposeList = mutableListOf(
+        Purpose(
+            title = "Coffee",
+            selected = true,
+            icon = Icons.Filled.Coffee
+        ),
+        Purpose(
+            title = "Business",
+            selected = true,
+            icon = Icons.Filled.Business
+        ),
+        Purpose(
+            title = "Hobbies",
+            selected = false,
+            icon = Icons.Filled.ArtTrack
+        ),
+        Purpose(
+            title = "Friendship",
+            selected = true,
+            icon = Icons.Filled.Groups
+        ),
+        Purpose(
+            title = "Movies",
+            selected = false,
+            icon = Icons.Filled.MovieFilter
+        ),
+        Purpose(
+            title = "Dining",
+            selected = false,
+            icon = Icons.Filled.Dining
+        ),
+        Purpose(
+            title = "Dating",
+            selected = false,
+            icon = Icons.Filled.Favorite
+        ),
+        Purpose(
+            title = "Matrimony",
+            selected = false,
+            icon = Icons.Filled.Favorite
+        )
+    )
     val peopleList = listOf(
         UserTile(
             name = "Vaibhav Kamble",

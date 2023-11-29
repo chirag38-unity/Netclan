@@ -1,6 +1,16 @@
 package com.chirag_redij.netclan.Homescreen.refine
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -56,6 +66,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.chirag_redij.netclan.Homescreen.Constants.PurposeList
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.spec.DestinationStyle
@@ -121,51 +132,10 @@ fun SaveButton() {
 data class Purpose (
     val title : String,
     var selected : Boolean,
-    val icon : ImageVector? = null
+    val icon : ImageVector
 )
 
-val PurposeList = mutableListOf(
-    Purpose(
-        title = "Coffee",
-        selected = true,
-        icon = Icons.Filled.Coffee
-    ),
-    Purpose(
-        title = "Business",
-        selected = true,
-        icon = Icons.Filled.Business
-    ),
-    Purpose(
-        title = "Hobbies",
-        selected = false,
-        icon = Icons.Filled.ArtTrack
-    ),
-    Purpose(
-        title = "Friendship",
-        selected = true,
-        icon = Icons.Filled.Groups
-    ),
-    Purpose(
-        title = "Movies",
-        selected = false,
-        icon = Icons.Filled.MovieFilter
-    ),
-    Purpose(
-        title = "Dining",
-        selected = false,
-        icon = Icons.Filled.Dining
-    ),
-    Purpose(
-        title = "Dating",
-        selected = false,
-        icon = Icons.Filled.Favorite
-    ),
-    Purpose(
-        title = "Matrimony",
-        selected = false,
-        icon = Icons.Filled.Favorite
-    )
-)
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -209,9 +179,15 @@ fun PurposeChip(purpose : Purpose) {
             Text(text = purpose.title, textAlign = TextAlign.Center)
         },
         leadingIcon = {
-            if(selected && purpose.icon != null) {
-                Icon(imageVector = purpose.icon, contentDescription = null, modifier = Modifier.size(FilterChipDefaults.IconSize) )
-            } else null
+            AnimatedVisibility(
+                visible = selected
+            ) {
+                Icon(
+                    imageVector = purpose.icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                )
+            }
         }
     )
 }
